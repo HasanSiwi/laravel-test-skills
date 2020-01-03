@@ -13,7 +13,7 @@ class CourseTypeTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('campuses')->insert([
+        DB::table('course_types')->insert([
             'name' => Str::random(5),
         ]);
     }

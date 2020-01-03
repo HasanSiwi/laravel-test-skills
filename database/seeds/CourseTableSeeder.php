@@ -18,10 +18,10 @@ class CourseTableSeeder extends Seeder
         $campuses = Campus::all();
         $course_types = CourseType::all();
 
-        DB::table('campuses')->insert([
+        DB::table('courses')->insert([
             'name' => Str::random(10),
             'campus_id' => $campuses->first()->id,
-            'course_id' => $course_types->first()->id,
+            'course_type_id' => $course_types->first()->id,
             'price' => '100',
         ]);
     }
