@@ -1,11 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
-use App\Http\Helpers\CustomResponse;
 use App\School;
+use App\Http\Helpers\CustomResponse;
 use Illuminate\Http\Request;
-use \Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
+
 
 class SchoolController extends Controller
 {
@@ -50,7 +53,13 @@ class SchoolController extends Controller
         DB::beginTransaction();
         try
         {
-            $currency = School::create($validated);
+            $logo_name = 'new_logo'.$request->name.'.jpg';
+            $request->file('logo')->move(public_path('/img'), $logo_name);
+
+            $photo_url = url('/img/'.$logo_name);
+            $validated['logo'] = $photo_url;
+
+            School::create($validated);
 
             DB::commit();
 
@@ -127,6 +136,7 @@ class SchoolController extends Controller
         try
         {
             School::where('id', $id)->delete();
+
             $this->result = $school->delete();
             DB::commit();
             return CustomResponse::customResponse(
@@ -149,10 +159,10 @@ class SchoolController extends Controller
     public function rules()
     {
         return [
-            'name' => 'required|max:255',
-            'email' => 'required|email',
-            'logo' => 'required',
-            'website' => '',
+            'name'      => 'required|max:255',
+            'email'     => 'required|email',
+            'logo'      => 'required|image|dimensions:min_width=100,min_height=100',
+            'website'   => '',
         ];
     }
 }
