@@ -11,11 +11,4 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
 
-Route::resource('/school',      'SchoolController');
-Route::resource('/campus',      'CampusController');
-Route::resource('/course',      'CourseController');
-Route::resource('/course-type', 'CourseTypeController');
