@@ -153,10 +153,10 @@ class CourseController extends Controller
     public function rules()
     {
         return [
-            'name'      => 'required|max:255',
-            'email'     => 'required|email',
-            'logo'      => 'required|image|dimensions:min_width=100,min_height=100',
-            'website'   => '',
+            'name'           => 'required|max:255',
+            'campus_id'      => 'required',
+            'course_type_id' => 'required',
+            'price'          => 'required',
         ];
     }
 }
