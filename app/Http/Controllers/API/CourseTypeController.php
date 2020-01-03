@@ -53,12 +53,6 @@ class CourseTypeController extends Controller
         DB::beginTransaction();
         try
         {
-            $logo_name = 'new_logo'.$request->name.'.jpg';
-            $request->file('logo')->move(public_path('/img'), $logo_name);
-
-            $photo_url = url('/img/'.$logo_name);
-            $validated['logo'] = $photo_url;
-
             CourseType::create($validated);
 
             DB::commit();
