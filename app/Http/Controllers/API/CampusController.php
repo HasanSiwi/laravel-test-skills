@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\API;
 
 use App\Campus;
-use App\Http\Helpers\CustomResponse;
+use App\School;
+use App\Mail\CampusEntered;
 use Illuminate\Http\Request;
+use App\Http\Helpers\CustomResponse;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 class CampusController extends Controller
@@ -56,6 +59,8 @@ class CampusController extends Controller
 
             DB::commit();
 
+            $this->sendEmail($request->all());
+
             return CustomResponse::customResponse(
                 $validated,
                 CustomResponse::$successCode,
@@ -68,7 +73,7 @@ class CampusController extends Controller
             return CustomResponse::customResponse(
                 null,
                 CustomResponse::$successCode,
-                'the campus has NOT been created successfully'
+                'the campus has NOT been created successfully, '.$e->getMessage()
             );
         }
     }
@@ -146,6 +151,13 @@ class CampusController extends Controller
                 "the campus has NOT been deleted successfully"
             );
         }
+    }
+
+    public function sendEmail($data)
+    {
+        $school = School::where('id', $data['school_id'])->first();
+
+        return Mail::to($school->email)->send(new CampusEntered($data));
     }
 
     public function rules()
